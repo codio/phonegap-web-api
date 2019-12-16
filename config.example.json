@@ -38,7 +38,7 @@
         "appenders": {
             "phonegap": {
                 "type": "file",
-                "filename": "phonegap-web-api.log"
+                "filename": "logs/phonegap-web-api.log"
             }
         },
         "categories": { "default": { "appenders": ["phonegap"], "level": "trace" } },
