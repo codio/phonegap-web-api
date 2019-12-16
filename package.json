@@ -1,6 +1,6 @@
 {
   "name": "phonegap-web-api",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "author": "Dmitrii Suchkov <dsuchkov@applicationcraft.com>",
   "bin": {},
@@ -8,7 +8,7 @@
     "start": "node bin/api"
   },
   "dependencies": {
-    "amqplib": "0.2.0",
+    "amqplib": "0.5.5",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
     "log4js": "^6.1.0",
