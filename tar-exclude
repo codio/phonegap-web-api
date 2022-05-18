@@ -1,0 +1,7 @@
+.git
+.idea
+docs
+logs
+test
+tar-exclude
+phonegap_dist

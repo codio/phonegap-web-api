@@ -1,0 +1,60 @@
+name: Phonegap
+on: push
+
+env:
+  BINARY_REPOSITORY_URL: ${{ secrets.BINARY_REPOSITORY_URL }}
+  BINARY_REPOSITORY_CREDENTIALS: ${{ secrets.BINARY_REPOSITORY_USER }}:${{ secrets.BINARY_REPOSITORY_PASSWORD }}
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '12'
+          cache: 'npm'
+
+      - run: npm i
+
+      - name: echo nodejs information
+        run: |
+          echo "node version $(node -v) running"
+          echo "npm version $(npm -v) running"
+
+      - name: build
+        run: |
+          ./build.sh "$GITHUB_SHA"
+        timeout-minutes: 15
+
+      - name: Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          custom_payload: |
+            {
+              attachments: [{
+              text: "<https://github.com/${{ github.repository }}/actions/runs/${{github.run_id}}|${{ github.workflow }} build> for ${{ github.repository }} by ${{ github.actor }} has ${{ job.status }} on branch ${{ github.ref_name }}",
+              color: "good"
+              }]
+            }
+        if: success()
+
+      - name: Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          custom_payload: |
+            {
+              attachments: [{
+              text: "<https://github.com/${{ github.repository }}/actions/runs/${{github.run_id}}|${{ github.workflow }} build> for ${{ github.repository }} by ${{ github.actor }} has ${{ job.status }} on branch ${{ github.ref_name }}",
+              color: "#FF0000"
+              }]
+            }
+        if: failure()
